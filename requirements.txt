@@ -1,0 +1,13 @@
+flask
+flask-cors
+requests
+sentence-transformers
+faiss-cpu
+langchain 
+langchain-community 
+langchain-core 
+langchain-chroma 
+chromadb 
+pypdf
+rank-bm25
+langchain-huggingface
