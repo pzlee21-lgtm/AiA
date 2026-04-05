@@ -112,6 +112,24 @@ def ask():
     patient_data = data.get("patient", {})
     labs_data = data.get("labs", {})
     vitals_data = data.get("vitals", {})
+
+    # Fallbacks for empty nested dicts when flutter sends flat JSON
+    if not patient_data:
+        patient_data = {
+            "age": data.get("age"),
+            "weight": data.get("weight"),
+            "allergy": data.get("allergy") or data.get("allergy_details")
+        }
+        # remove none keys
+        patient_data = {k: v for k, v in patient_data.items() if v is not None}
+
+    if not labs_data:
+        labs_data = {
+            "eGFR": data.get("eGFR") or data.get("egfr"),
+            "creatinine": data.get("creatinine")
+        }
+        labs_data = {k: v for k, v in labs_data.items() if v is not None}
+
     diagnosis = (data.get("diagnosis") or "").strip()
     medicines = data.get("prescribed_medicines", [])
 

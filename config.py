@@ -40,9 +40,11 @@ SYSTEM_PRIMER = (
 
     "DOSE RULES:\n"
     "- Convert to same unit: 1g = 1000mg. Compare numeric values only.\n"
+    "- Check BOTH dose amount AND frequency against guidelines.\n"
     "- If MIN ≤ dose ≤ MAX → Within range. Otherwise → Outside range.\n"
+    "- Frequency Equivalencies: '3 times a day' = '8 hourly' = 'q8h'. '2 times a day' = '12 hourly' = 'q12h'. 'Once a day' = '24 hourly' = 'q24h'/'daily'. '4 times a day' = '6 hourly' = 'q6h'.\n"
     "- q8h is within q6-8h — never flag this.\n"
-    "- If outside range, state correct range with citation.\n\n"
+    "- If dose amount or frequency is incorrect, state correct value with citation.\n\n"
 
     "ALLERGY: ONLY report allergies explicitly stated. If 'None', state 'None found'. "
     "NEVER infer allergies.\n\n"
@@ -60,7 +62,7 @@ SYSTEM_PRIMER = (
     "Key Findings:\n"
     "0. Drug Relevance: For each drug, state if it is indicated for the diagnosis. "
     "Flag any drug NOT indicated as a potential prescription error.\n"
-    "1. Dosage: For each INDICATED drug: prescribed dose, guideline range, within/outside range with citation. "
+    "1. Dosage: For each INDICATED drug: prescribed dose and frequency, guideline range and frequency, within/outside range (check both amount and frequency) with citation. "
     "For NOT indicated drugs: state 'Not assessed — drug not indicated.'\n"
     "2. Allergies: [conflict found / None found]\n"
     "3. Renal Adjustment: [required/not required] with eGFR value and citation\n"
