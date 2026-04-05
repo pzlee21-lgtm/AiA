@@ -130,24 +130,30 @@ def check_dose_in_range(medicines: list, retrieved: list) -> str:
         for item in retrieved:
             text = item.get("text", "")
             pattern = re.search(
-                rf'{re.escape(name)}[^.]*?(\d+)\s*[-–]\s*(\d+)\s*mg',
+                rf'{re.escape(name)}[^.]*?(\d+)(?:\s*[-–]\s*(\d+))?\s*mg',
                 text, re.IGNORECASE
             )
             if pattern:
                 min_dose = float(pattern.group(1))
-                max_dose = float(pattern.group(2))
+                max_dose = float(pattern.group(2)) if pattern.group(2) else min_dose
                 range_found = (min_dose, max_dose)
                 break
 
         if range_found:
             min_d, max_d = range_found
             within = min_d <= dose_val <= max_d
-            verdict = "WITHIN RANGE" if within else "OUTSIDE RANGE"
-            hints.append(
-                f"DOSE VERDICT: {name} {dose_str}{unit} = {dose_val:.0f}mg. "
-                f"Guideline range: {min_d:.0f}-{max_d:.0f}mg. "
-                f"You MUST use '{verdict}' — do NOT recalculate or override this."
-            )
+            if within:
+                hints.append(
+                    f"DOSE VERDICT: {name} {dose_str}{unit} = {dose_val:.0f}mg. "
+                    f"Guideline range found: {min_d:.0f}{f'-{max_d:.0f}' if min_d != max_d else ''}mg. "
+                    f"Dose AMOUNT is within range. You MUST now evaluate if the FREQUENCY is correct according to the guidelines."
+                )
+            else:
+                hints.append(
+                    f"DOSE VERDICT: {name} {dose_str}{unit} = {dose_val:.0f}mg. "
+                    f"Guideline range found: {min_d:.0f}{f'-{max_d:.0f}' if min_d != max_d else ''}mg. "
+                    f"Dose AMOUNT is OUTSIDE RANGE. You MUST state this and evaluate if the FREQUENCY is correct according to the guidelines."
+                )
         else:
             hints.append(
                 f"DOSE PRE-CHECK: {name} = {dose_val:.0f}mg. "
